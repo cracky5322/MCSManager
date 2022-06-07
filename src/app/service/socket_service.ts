@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import http from "http";
@@ -32,7 +32,7 @@ export default class SocketService {
     const io = new Server(httpServer, {
       path: "/socket.io",
       cors: {
-        // 临时的
+        // 臨時的
         origin: "*",
         methods: ["GET", "POST"],
         credentials: true
@@ -40,12 +40,12 @@ export default class SocketService {
     });
 
     io.on("connection", (socket) => {
-      // 用户 Websocket 链接时，加入全局，绑定相关事件
+      // 使用者 Websocket 連結時，加入全域性，繫結相關事件
       logger.info(`Websocket ${socket.id}(${socket.handshake.address}) connection`);
       this.socketsMap.set(socket.id, socket);
-      // 绑定业务事件
+      // 繫結業務事件
       SocketService.bindEvents(socket);
-      // 当用户 Websocket 断开时，从Socket列表中删除，并释放一些资源
+      // 當用戶 Websocket 斷開時，從Socket列表中刪除，並釋放一些資源
       socket.on("disconnect", () => {
         this.socketsMap.delete(socket.id);
         for (const name of socket.eventNames()) socket.removeAllListeners(name);
@@ -57,7 +57,7 @@ export default class SocketService {
     return this.server;
   }
 
-  // 用于绑定 Socket 事件
+  // 用於繫結 Socket 事件
   private static bindEvents(socket: Socket) {
     new WebSocketRouter(socket);
   }

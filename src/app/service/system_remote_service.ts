@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import { logger } from "./log";
@@ -27,9 +27,9 @@ import StorageSubsystem from "../common/system_storage";
 import fs from "fs-extra";
 import path from "path";
 
-// 远程服务管理子系统（RemoteServiceSubsystem）这个子系统将是最重要的系统之一
-// 主要功能是在所有地方存储远程服务
-// 扫描本地服务，统一管理，远程调用和代理等
+// 遠端服務管理子系統（RemoteServiceSubsystem）這個子系統將是最重要的系統之一
+// 主要功能是在所有地方儲存遠端服務
+// 掃描本地服務，統一管理，遠端呼叫和代理等
 class RemoteServiceSubsystem extends UniversalRemoteSubsystem<RemoteService> {
   constructor() {
     super();
@@ -46,15 +46,15 @@ class RemoteServiceSubsystem extends UniversalRemoteSubsystem<RemoteService> {
       newService.connect();
     });
 
-    // 若无任何守护进程，则检测本地是否存在守护进程
+    // 若無任何守護程序，則檢測本地是否存在守護程序
     if (this.services.size === 0) {
       this.initConnectLocalhost("");
     }
 
-    logger.info(`远程服务子系统初始化完毕`);
-    logger.info(`总计配置节点数: ${this.services.size}`);
+    logger.info(`遠端服務子系統初始化完畢`);
+    logger.info(`總計配置節點數: ${this.services.size}`);
 
-    // 注册定期连接状态检查
+    // 註冊定期連線狀態檢查
     setInterval(() => this.connectionStatusCheckTask(), 1000 * 60);
   }
 
@@ -71,7 +71,7 @@ class RemoteServiceSubsystem extends UniversalRemoteSubsystem<RemoteService> {
     return instance;
   }
 
-  // 根据 UUID 删除指定的远程服务
+  // 根據 UUID 刪除指定的遠端服務
   deleteRemoteService(uuid: string) {
     if (this.getInstance(uuid)) {
       this.getInstance(uuid).disconnect();
@@ -111,22 +111,22 @@ class RemoteServiceSubsystem extends UniversalRemoteSubsystem<RemoteService> {
     const localKeyFilePath = path.normalize(
       path.join(process.cwd(), "../daemon/data/Config/global.json")
     );
-    logger.info(`正在尝试读取本地守护进程: ${localKeyFilePath}`);
+    logger.info(`正在嘗試讀取本地守護程序: ${localKeyFilePath}`);
     if (fs.existsSync(localKeyFilePath)) {
-      logger.info("检测到本地守护进程，正在自动获取密钥和端口...");
+      logger.info("檢測到本地守護程序，正在自動獲取金鑰和埠...");
       const localDaemonConfig = JSON.parse(
         fs.readFileSync(localKeyFilePath, { encoding: "utf-8" })
       );
       const localKey = localDaemonConfig.key;
       const localPort = localDaemonConfig.port;
-      logger.info("正在自动连接本地守护进程...");
+      logger.info("正在自動連線本地守護程序...");
       return this.registerRemoteService({ apiKey: localKey, port: localPort, ip });
     } else if (key) {
       const port = 24444;
-      logger.info("无法自动获取本地守护进程配置文件，已发起连接但可能未经证实...");
+      logger.info("無法自動獲取本地守護程序配置檔案，已發起連線但可能未經證實...");
       return this.registerRemoteService({ apiKey: key, port, ip });
     }
-    logger.info("无法自动获取本地守护进程配置文件，请手动连接守护进程");
+    logger.info("無法自動獲取本地守護程序配置檔案，請手動連線守護程序");
   }
 
   count() {
@@ -139,12 +139,12 @@ class RemoteServiceSubsystem extends UniversalRemoteSubsystem<RemoteService> {
     return { available, total };
   }
 
-  // 定期连接状态检查
+  // 定期連線狀態檢查
   connectionStatusCheckTask() {
     this.services?.forEach((v) => {
       if (v && v.available === false) {
         logger.warn(
-          `检测到守护进程 ${v.config.remarks} ${v.config.ip}:${v.config.port} 状态异常，正在重置并连接`
+          `檢測到守護程序 ${v.config.remarks} ${v.config.ip}:${v.config.port} 狀態異常，正在重置並連線`
         );
         return v.connect();
       }

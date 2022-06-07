@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Router from "@koa/router";
@@ -28,7 +28,7 @@ import RemoteRequest from "../../service/remote_command";
 const router = new Router({ prefix: "/environment" });
 
 // [Top-level Permission]
-// 获取指定远程服务镜像列表
+// 獲取指定遠端服務映象列表
 router.get(
   "/image",
   permission({ level: 10 }),
@@ -46,7 +46,7 @@ router.get(
 );
 
 // [Top-level Permission]
-// 创建镜像
+// 建立映象
 router.post(
   "/image",
   permission({ level: 10 }),
@@ -68,7 +68,7 @@ router.post(
 );
 
 // [Top-level Permission]
-// 删除指定镜像
+// 刪除指定映象
 router.delete(
   "/image",
   permission({ level: 10 }),
@@ -89,7 +89,7 @@ router.delete(
 );
 
 // [Top-level Permission]
-// 获取指定远程服务现有容器列表
+// 獲取指定遠端服務現有容器列表
 router.get(
   "/containers",
   permission({ level: 10 }),
@@ -107,7 +107,7 @@ router.get(
 );
 
 // [Top-level Permission]
-// 获取指定远程服务现有网络列表
+// 獲取指定遠端服務現有網路列表
 router.get(
   "/networkModes",
   permission({ level: 10 }),
@@ -125,7 +125,7 @@ router.get(
 );
 
 // [Top-level Permission]
-// 获取指定远程服务的创建镜像进度
+// 獲取指定遠端服務的建立映象進度
 router.get(
   "/progress",
   permission({ level: 10 }),

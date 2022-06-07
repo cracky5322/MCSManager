@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Router from "@koa/router";
@@ -30,7 +30,7 @@ import { timeUuid } from "../../service/password";
 const router = new Router({ prefix: "/instance" });
 
 // [Top-level Permission]
-// 获取某实例详细信息
+// 獲取某例項詳細資訊
 router.get(
   "/",
   permission({ level: 10 }),
@@ -51,7 +51,7 @@ router.get(
 );
 
 // [Top-level Permission]
-// 创建实例
+// 建立例項
 router.post(
   "/",
   permission({ level: 10 }),
@@ -70,7 +70,7 @@ router.post(
 );
 
 // [Top-level Permission]
-// 创建实例时上传文件
+// 建立例項時上傳檔案
 router.post(
   "/upload",
   permission({ level: 10 }),
@@ -83,8 +83,8 @@ router.post(
       const remoteService = RemoteServiceSubsystem.getInstance(serviceUuid);
       const result = await new RemoteRequest(remoteService).request("instance/new", config);
       const newInstanceUuid = result.instanceUuid;
-      if (!newInstanceUuid) throw new Error("创建实例失败");
-      // 向守护进程发送跨端文件上传任务
+      if (!newInstanceUuid) throw new Error("建立例項失敗");
+      // 向守護程序傳送跨端檔案上傳任務
       const addr = `${remoteService.config.ip}:${remoteService.config.port}`;
       const password = timeUuid();
       await new RemoteRequest(remoteService).request("passport/register", {
@@ -107,7 +107,7 @@ router.post(
 );
 
 // [Top-level Permission]
-// 更新实例信息（管理用户）
+// 更新例項資訊（管理使用者）
 router.put(
   "/",
   permission({ level: 10 }),
@@ -130,7 +130,7 @@ router.put(
 );
 
 // [Top-level Permission]
-// 删除实例
+// 刪除例項
 router.delete(
   "/",
   permission({ level: 10 }),
@@ -153,7 +153,7 @@ router.delete(
 );
 
 // [Top-level Permission]
-// 批量开启实例路由
+// 批次開啟例項路由
 router.post("/multi_open", permission({ level: 10 }), async (ctx) => {
   try {
     const instances = ctx.request.body;
@@ -172,7 +172,7 @@ router.post("/multi_open", permission({ level: 10 }), async (ctx) => {
 });
 
 // [Top-level Permission]
-// 批量关闭实例路由
+// 批次關閉例項路由
 router.post("/multi_stop", permission({ level: 10 }), async (ctx) => {
   try {
     const instances = ctx.request.body;
@@ -191,7 +191,7 @@ router.post("/multi_stop", permission({ level: 10 }), async (ctx) => {
 });
 
 // [Top-level Permission]
-// 批量终止实例路由
+// 批次終止例項路由
 router.post("/multi_kill", permission({ level: 10 }), async (ctx) => {
   try {
     const instances = ctx.request.body;

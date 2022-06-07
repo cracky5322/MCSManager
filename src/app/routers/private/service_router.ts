@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Koa from "koa";
@@ -29,8 +29,8 @@ import RemoteRequest from "../../service/remote_command";
 const router = new Router({ prefix: "/service" });
 
 // [Top-level Permission]
-// 获取远程服务列表
-// 仅包含服务信息，不包括实例信息列表
+// 獲取遠端服務列表
+// 僅包含服務資訊，不包括例項資訊列表
 router.get("/remote_services_list", permission({ level: 10 }), async (ctx) => {
   const result = new Array();
   for (const iterator of RemoteServiceSubsystem.services.entries()) {
@@ -47,7 +47,7 @@ router.get("/remote_services_list", permission({ level: 10 }), async (ctx) => {
 });
 
 // [Top-level Permission]
-// 向守护进程查询指定的实例
+// 向守護程序查詢指定的例項
 router.get(
   "/remote_service_instances",
   permission({ level: 10 }),
@@ -70,7 +70,7 @@ router.get(
 );
 
 // [Top-level Permission]
-// 获取远程服务器系统信息
+// 獲取遠端伺服器系統資訊
 router.get("/remote_services_system", permission({ level: 10 }), async (ctx) => {
   const result = new Array();
   for (const iterator of RemoteServiceSubsystem.services.entries()) {
@@ -87,7 +87,7 @@ router.get("/remote_services_system", permission({ level: 10 }), async (ctx) => 
 });
 
 // [Top-level Permission]
-// 获取远程服务器实例信息（浏览过大）
+// 獲取遠端伺服器例項資訊（瀏覽過大）
 router.get("/remote_services", permission({ level: 10 }), async (ctx) => {
   const result = new Array();
   for (const iterator of RemoteServiceSubsystem.services.entries()) {
@@ -96,9 +96,9 @@ router.get("/remote_services", permission({ level: 10 }), async (ctx) => {
     try {
       instancesInfo = await new RemoteRequest(remoteService).request("instance/overview");
     } catch (err) {
-      // 忽略请求出错
+      // 忽略請求出錯
     }
-    // 如果连接可用则发送远程指令
+    // 如果連線可用則傳送遠端指令
     result.push({
       uuid: remoteService.uuid,
       ip: remoteService.config.ip,
@@ -111,14 +111,14 @@ router.get("/remote_services", permission({ level: 10 }), async (ctx) => {
 });
 
 // [Top-level Permission]
-// 新增远程服务
+// 新增遠端服務
 router.post(
   "/remote_service",
   permission({ level: 10 }),
   validator({ body: { apiKey: String, port: Number, ip: String, remarks: String } }),
   async (ctx) => {
     const parameter = ctx.request.body;
-    // 进行异步注册
+    // 進行非同步註冊
     const instance = RemoteServiceSubsystem.registerRemoteService({
       apiKey: parameter.apiKey,
       port: parameter.port,
@@ -130,7 +130,7 @@ router.post(
 );
 
 // [Top-level Permission]
-// 修改远程服务参数
+// 修改遠端服務引數
 router.put(
   "/remote_service",
   permission({ level: 10 }),
@@ -138,7 +138,7 @@ router.put(
   async (ctx) => {
     const uuid = String(ctx.request.query.uuid);
     const parameter = ctx.request.body;
-    if (!RemoteServiceSubsystem.services.has(uuid)) throw new Error("实例不存在");
+    if (!RemoteServiceSubsystem.services.has(uuid)) throw new Error("例項不存在");
     await RemoteServiceSubsystem.edit(uuid, {
       port: parameter.port,
       ip: parameter.ip,
@@ -150,28 +150,28 @@ router.put(
 );
 
 // [Top-level Permission]
-// 删除远程服务
+// 刪除遠端服務
 router.delete(
   "/remote_service",
   permission({ level: 10 }),
   validator({ query: { uuid: String } }),
   async (ctx) => {
     const uuid = String(ctx.request.query.uuid);
-    if (!RemoteServiceSubsystem.services.has(uuid)) throw new Error("实例不存在");
+    if (!RemoteServiceSubsystem.services.has(uuid)) throw new Error("例項不存在");
     await RemoteServiceSubsystem.deleteRemoteService(uuid);
     ctx.body = true;
   }
 );
 
 // [Top-level Permission]
-// 连接远程实例
+// 連線遠端例項
 router.get(
   "/link_remote_service",
   permission({ level: 10 }),
   validator({ query: { uuid: String } }),
   async (ctx) => {
     const uuid = String(ctx.request.query.uuid);
-    if (!RemoteServiceSubsystem.services.has(uuid)) throw new Error("实例不存在");
+    if (!RemoteServiceSubsystem.services.has(uuid)) throw new Error("例項不存在");
     try {
       RemoteServiceSubsystem.getInstance(uuid).connect();
       ctx.body = true;

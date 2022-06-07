@@ -10,39 +10,39 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 // @Entity
 export default class SystemConfig {
-  // HTTP 服务端口与IP
+  // HTTP 服務埠與IP
   httpPort: number = 23333;
   httpIp: string = null;
 
-  // 数据传输端口
+  // 資料傳輸埠
   dataPort: number = 23334;
 
-  // 分布式转发模式
+  // 分散式轉發模式
   forwardType: number = 1;
 
-  // 是否准许跨域请求
+  // 是否准許跨域請求
   crossDomain: boolean = false;
-  // 是否采用 Gzip 压缩 HTTP 返回信息
+  // 是否採用 Gzip 壓縮 HTTP 返回資訊
   gzip: boolean = false;
-  // 最大同时压缩任务
+  // 最大同時壓縮任務
   maxCompress: number = 1;
-  // 最大同时下载任务
+  // 最大同時下載任務
   maxDonwload: number = 10;
-  // 解压缩实现形式
+  // 解壓縮實現形式
   zipType: number = 1;
-  // 登录次数IP限制
+  // 登入次數IP限制
   loginCheckIp: boolean = true;
-  // 登录界面文案
+  // 登入介面文案
   loginInfo: string = "";
 }

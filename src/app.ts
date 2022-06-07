@@ -10,23 +10,23 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
-// 程序启动入口文件
+// 程式啟動入口檔案
 
 // 初始化版本管理器
 import { initVersionManager, getVersion } from "./app/version";
 initVersionManager();
 const VERSION = getVersion();
 
-// 显示产品标识
+// 顯示產品標識
 console.log(`______  _______________________  ___                                         
 ___   |/  /_  ____/_  ___/__   |/  /_____ _____________ _______ _____________
 __  /|_/ /_  /    _____ \\__  /|_/ /_  __  /_  __ \\  __  /_  __  /  _ \\_  ___/
@@ -38,7 +38,7 @@ _  /  / / / /___  ____/ /_  /  / / / /_/ /_  / / / /_/ /_  /_/ //  __/  /
  + Version ${VERSION}
 `);
 
-// 启动前开发环境检测
+// 啟動前開發環境檢測
 import fs from "fs";
 if (!fs.existsSync("public")) {
   console.log(
@@ -49,9 +49,9 @@ if (!fs.existsSync("public")) {
     'If you are running in development mode, create "public" directory and place the frontend static files before rerunning.'
   );
   console.log("");
-  console.log("无法启动，此项目是 MCSManager 开发人员所用项目，普通用户不可直接运行。");
-  console.log("请前往 https://mcsmanager.com/ 了解最新的安装方式。");
-  console.log("如果您要以开发模式运行，请创建 public 目录并放置前端静态文件再重新运行。");
+  console.log("無法啟動，此專案是 MCSManager 開發人員所用專案，普通使用者不可直接執行。");
+  console.log("請前往 https://mcsmanager.com/ 瞭解最新的安裝方式。");
+  console.log("如果您要以開發模式執行，請建立 public 目錄並放置前端靜態檔案再重新執行。");
   process.exit(0);
 }
 
@@ -68,16 +68,16 @@ import { middleware as protocolMiddleware } from "./app/middleware/protocol";
 
 const BASE_PATH = __dirname;
 
-// 装载全局配置文件
+// 裝載全域性配置檔案
 import { initSystemConfig, systemConfig } from "./app/setting";
 initSystemConfig();
 
 const app = new Koa();
 
-// 监听 Koa 错误
+// 監聽 Koa 錯誤
 app.on("error", (error) => {
-  // 屏蔽所有 Koa 框架级别事件
-  // 当 Koa 遭遇短连接洪水攻击时，很容易错误信息刷屏，有可能会间接影响某些应用程序运作
+  // 遮蔽所有 Koa 框架級別事件
+  // 當 Koa 遭遇短連線洪水攻擊時，很容易錯誤資訊刷屏，有可能會間接影響某些應用程式運作
 });
 
 app.use(
@@ -113,12 +113,12 @@ app.use(async (ctx, next) => {
 // Protocol middleware
 app.use(protocolMiddleware);
 
-// 静态文件路由
+// 靜態檔案路由
 app.use(koaStatic(path.join(BASE_PATH, "public")));
 
-// 装载所有路由
+// 裝載所有路由
 import { index } from "./app/index";
-// Websocket 路由（暂无用）
+// Websocket 路由（暫無用）
 // import SocketService from "./app/service/socket_service";
 index(app);
 
@@ -132,20 +132,20 @@ process.on("unhandledRejection", (reason, p) => {
   logger.error(`ERROR (unhandledRejection):`, reason, p);
 });
 
-// 启动 HTTP 服务
+// 啟動 HTTP 服務
 function startUp(port: number, host?: string) {
   const httpServer = http.createServer(app.callback());
 
-  // 暂不需要 Socket 服务
+  // 暫不需要 Socket 服務
   // SocketService.setUpSocketIO(httpServer);
 
   httpServer.listen(port, host);
   logger.info("================================");
-  logger.info("控制面板端已启动");
-  logger.info("项目参考: https://github.com/mcsmanager");
-  logger.info(`访问地址: http://${host ? host : "localhost"}:${port}/`);
-  logger.info(`软件公网访问需开放端口 ${port} 与守护进程端口`);
-  logger.info("关闭此程序请使用 Ctrl+C 快捷键");
+  logger.info("控制面板端已啟動");
+  logger.info("專案參考: https://github.com/mcsmanager");
+  logger.info(`訪問地址: http://${host ? host : "localhost"}:${port}/`);
+  logger.info(`軟體公網訪問需開放埠 ${port} 與守護程序埠`);
+  logger.info("關閉此程式請使用 Ctrl+C 快捷鍵");
   logger.info("================================");
 }
 

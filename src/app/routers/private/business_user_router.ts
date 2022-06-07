@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Koa from "koa";
@@ -28,7 +28,7 @@ import userSystem from "../../service/system_user";
 
 const router = new Router({ prefix: "/auth" });
 
-// 新增用户数据
+// 新增使用者資料
 router.post(
   "/",
   permission({ level: 10 }),
@@ -37,15 +37,15 @@ router.post(
     const userName = String(ctx.request.body.username);
     const passWord = String(ctx.request.body.password);
     const permission = Number(ctx.request.body.permission);
-    if (userName.length < 2 || userName.length > 18) throw new Error("错误的用户名长度规则");
-    if (passWord.length < 6 || passWord.length > 18) throw new Error("错误的密码长度规则");
-    if (userSystem.existUserName(userName)) throw new Error("用户名已经被占用");
+    if (userName.length < 2 || userName.length > 18) throw new Error("錯誤的使用者名稱長度規則");
+    if (passWord.length < 6 || passWord.length > 18) throw new Error("錯誤的密碼長度規則");
+    if (userSystem.existUserName(userName)) throw new Error("使用者名稱已經被佔用");
     const result = register(ctx, userName, passWord, permission);
     ctx.body = result;
   }
 );
 
-// 删除用户数据
+// 刪除使用者資料
 router.del("/", permission({ level: 10 }), async (ctx: Koa.ParameterizedContext) => {
   const uuids = ctx.request.body;
   try {
@@ -54,11 +54,11 @@ router.del("/", permission({ level: 10 }), async (ctx: Koa.ParameterizedContext)
     }
     ctx.body = true;
   } catch (error) {
-    ctx.throw(500, "无法完成用户数据删除");
+    ctx.throw(500, "無法完成使用者資料刪除");
   }
 });
 
-// 用户搜索功能
+// 使用者搜尋功能
 router.get(
   "/search",
   permission({ level: 10 }),
@@ -70,7 +70,7 @@ router.get(
     const condition: any = {};
     if (userName) condition["userName"] = `%${userName}%`;
     let resultPage = userSystem.getQueryWrapper().selectPage(condition, page, pageSize);
-    // 复制一份，删除多余数据
+    // 複製一份，刪除多餘資料
     resultPage = JSON.parse(JSON.stringify(resultPage));
     resultPage.data.forEach((v) => {
       delete v.passWord;

@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Router from "@koa/router";
@@ -30,7 +30,7 @@ import { isHaveInstanceByUuid } from "../../service/permission_service";
 
 const router = new Router({ prefix: "/files" });
 
-// 路由权限验证中间件
+// 路由許可權驗證中介軟體
 router.use(async (ctx, next) => {
   const instanceUuid = String(ctx.query.uuid);
   const serviceUuid = String(ctx.query.remote_uuid);
@@ -39,11 +39,11 @@ router.use(async (ctx, next) => {
     await next();
   } else {
     ctx.status = 403;
-    ctx.body = "[Forbidden] [中间件] 参数不正确或非法访问实例";
+    ctx.body = "[Forbidden] [中介軟體] 引數不正確或非法訪問例項";
   }
 });
 
-// 查看文件列表
+// 檢視檔案列表
 router.get(
   "/list",
   permission({ level: 1 }),
@@ -71,7 +71,7 @@ router.get(
   }
 );
 
-// 新建目录
+// 新建目錄
 router.post(
   "/mkdir",
   permission({ level: 1 }),
@@ -93,7 +93,7 @@ router.post(
   }
 );
 
-// 编辑文件
+// 編輯檔案
 router.put(
   "/",
   permission({ level: 1 }),
@@ -117,7 +117,7 @@ router.put(
   }
 );
 
-// 复制文件
+// 複製檔案
 router.post(
   "/copy",
   permission({ level: 1 }),
@@ -139,7 +139,7 @@ router.post(
   }
 );
 
-// 重命名/移动文件
+// 重新命名/移動檔案
 router.put(
   "/move",
   permission({ level: 1 }),
@@ -161,7 +161,7 @@ router.put(
   }
 );
 
-// 删除文件
+// 刪除檔案
 router.delete(
   "/",
   permission({ level: 1 }),
@@ -183,7 +183,7 @@ router.delete(
   }
 );
 
-// 压缩/解压缩文件
+// 壓縮/解壓縮檔案
 router.post(
   "/compress",
   permission({ level: 1 }),

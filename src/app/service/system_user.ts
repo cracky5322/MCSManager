@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import md5 from "md5";
@@ -35,12 +35,12 @@ class UserSubsystem {
       const user = StorageSubsystem.load("User", User, uuid) as User;
       this.objects.set(uuid, user);
     });
-    logger.info(`用户系统初始化完毕`);
-    logger.info(`用户数：${this.objects.size}`);
+    logger.info(`使用者系統初始化完畢`);
+    logger.info(`使用者數：${this.objects.size}`);
     if (this.objects.size <= 0) {
-      logger.info("检测到用户数量等于0，正在生成新用户");
-      logger.info("账号: root");
-      logger.info("密码: 123456");
+      logger.info("檢測到使用者數量等於0，正在生成新使用者");
+      logger.info("賬號: root");
+      logger.info("密碼: 123456");
       this.create({
         userName: "root",
         passWord: "123456",
@@ -52,14 +52,14 @@ class UserSubsystem {
 
   create(config: IUser): User {
     const newUuid = v4().replace(/-/gim, "");
-    // 初始化必要用户数据
+    // 初始化必要使用者資料
     const instance = new User();
     instance.uuid = newUuid;
     instance.registerTime = new Date().toLocaleString();
-    // 加入到用户系统
+    // 加入到使用者系統
     this.setInstance(newUuid, instance);
     this.edit(instance.uuid, config);
-    // 持久化保存用户信息
+    // 持久化儲存使用者資訊
     StorageSubsystem.store("User", instance.uuid, instance);
     return instance;
   }

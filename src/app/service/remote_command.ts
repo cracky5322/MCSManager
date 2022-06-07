@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import { v4 } from "uuid";
@@ -42,9 +42,9 @@ export default class RemoteRequest {
     if (!this.rService.socket)
       throw new Error("The Socket must is SocketIOClient.Socket, Not null.");
     if (!this.rService.available && !force)
-      throw new Error("远程服务状态不可用，建议尝试重连远程服务或检查配置");
+      throw new Error("遠端服務狀態不可用，建議嘗試重連遠端服務或檢查配置");
     if (!this.rService.socket.connected && !force)
-      throw new Error("远程服务连接不可用，无法发送数据");
+      throw new Error("遠端服務連線不可用，無法傳送資料");
 
     return new Promise((resolve, reject) => {
       const uuid = [v4(), new Date().getTime()].join("");
@@ -52,7 +52,7 @@ export default class RemoteRequest {
 
       // Start countdown
       const countdownTask = setTimeout(
-        () => reject(new RemoteError(`请求远程(${this.rService.config.ip})事件 [${event}] 超时`)),
+        () => reject(new RemoteError(`請求遠端(${this.rService.config.ip})事件 [${event}] 超時`)),
         timeout
       );
 
@@ -60,7 +60,7 @@ export default class RemoteRequest {
       const fn = (msg: IPacket) => {
         if (msg.uuid === uuid) {
           clearTimeout(countdownTask);
-          // 每当返回消息后，匹配ID确保响应是请求的对应，则删除自身事件监听
+          // 每當返回訊息後，匹配ID確保響應是請求的對應，則刪除自身事件監聽
           this.rService.socket.removeEventListener(event, fn);
           if (msg.status == RemoteService.STATUS_OK) resolve(msg.data);
           else if (msg.data.err) {

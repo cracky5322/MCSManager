@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Koa from "koa";
@@ -30,18 +30,18 @@ export async function middleware(
   ctx: Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext, any>,
   next: Function
 ): Promise<void> {
-  // 接口请求次数增加
+  // 介面請求次數增加
   if (ctx.url.startsWith("/api/")) {
     VisualDataSubsystem.addRequestCount();
   }
-  // 传递下一个中间件，遇到任何错误和返回数据将按照响应协议处理
+  // 傳遞下一個中介軟體，遇到任何錯誤和返回資料將按照響應協議處理
   try {
     await next();
   } catch (error) {
     ctx.body = error;
   }
 
-  // 设置公开头
+  // 設定公開頭
   if (systemConfig.crossDomain) {
     ctx.response.set("Access-Control-Allow-Origin", "*");
     ctx.response.set("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
@@ -51,11 +51,11 @@ export async function middleware(
     );
   }
 
-  // 产品信息标识
+  // 產品資訊標識
   ctx.cookies.set("MCSManager", "Copyright 2021 Suwings");
   ctx.response.set("X-Powered-By", "MCSManager");
 
-  // 发送Error类时序列化并显示
+  // 傳送Error類時序列化並顯示
   if (ctx.body instanceof Error) {
     const error = ctx.body as Error;
     ctx.status = 500;
@@ -67,12 +67,12 @@ export async function middleware(
     return;
   }
 
-  // 放行所有数据流
+  // 放行所有資料流
   if (ctx.body instanceof Stream) {
     return;
   }
 
-  // 404 错误码
+  // 404 錯誤碼
   if (ctx.status == 404) {
     ctx.status = 404;
     ctx.body = JSON.stringify({
@@ -83,7 +83,7 @@ export async function middleware(
     return;
   }
 
-  // 响应文本为字符串时则使用普通格式化
+  // 響應文字為字串時則使用普通格式化
   if (typeof ctx.body == "string") {
     const status = ctx.status;
     const data = ctx.body;
@@ -95,7 +95,7 @@ export async function middleware(
     return;
   }
 
-  // 返回结果为空时，显示处理失败
+  // 返回結果為空時，顯示處理失敗
   if (ctx.body === null || ctx.body === false || ctx.body === undefined) {
     ctx.status = 500;
     ctx.body = JSON.stringify({
@@ -106,7 +106,7 @@ export async function middleware(
     return;
   }
 
-  // 正常数据
+  // 正常資料
   if (ctx.status == 200) {
     ctx.body = JSON.stringify({
       status: ctx.status,

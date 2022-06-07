@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import * as io from "socket.io-client";
@@ -40,41 +40,41 @@ export default class RemoteService {
     this.config = config;
   }
 
-  // 连接远程服务
+  // 連線遠端服務
   public connect(connectOpts?: SocketIOClient.ConnectOpts) {
     if (connectOpts) this.config.connectOpts = connectOpts;
 
     if (this.available) {
-      logger.info(`[${this.uuid}] 用户发起重连已可用状态的远程服务，正在重置连接通道`);
+      logger.info(`[${this.uuid}] 使用者發起重連已可用狀態的遠端服務，正在重置連線通道`);
       this.disconnect();
     }
 
-    // 防止重复注册事件
+    // 防止重複註冊事件
     if (this.socket && this.socket.hasListeners("connect")) {
-      logger.info(`[${this.uuid}] 用户发起重复连接请求，现进行重置连接配置`);
+      logger.info(`[${this.uuid}] 使用者發起重複連線請求，現進行重置連線配置`);
       return this.refreshReconnect();
     }
 
-    // 开始正式连接远程Socket程序
+    // 開始正式連線遠端Socket程式
     let addr = `ws://${this.config.ip}:${this.config.port}`;
     if (this.config.ip.indexOf("wss://") === 0 || this.config.ip.indexOf("ws://") === 0) {
       addr = `${this.config.ip}:${this.config.port}`;
     }
-    logger.info(`[${this.uuid}] 面板正在尝试连接远程服务 ${addr}`);
+    logger.info(`[${this.uuid}] 面板正在嘗試連線遠端服務 ${addr}`);
     this.socket = io.connect(addr, connectOpts);
 
-    // 注册内置事件
+    // 註冊內建事件
     this.socket.on("connect", async () => {
-      logger.info(`远程服务 [${this.uuid}] [${this.config.ip}:${this.config.port}] 已连接`);
+      logger.info(`遠端服務 [${this.uuid}] [${this.config.ip}:${this.config.port}] 已連線`);
       await this.onConnect();
     });
     this.socket.on("disconnect", async () => {
-      logger.info(`远程服务 [${this.uuid}] [${this.config.ip}:${this.config.port}] 已断开`);
+      logger.info(`遠端服務 [${this.uuid}] [${this.config.ip}:${this.config.port}] 已斷開`);
       await this.onDisconnect();
     });
     this.socket.on("connect_error", async (error: string) => {
-      // 提示次数过于频繁，不再提示
-      // logger.warn(`远程服务 [${this.uuid}] [${this.config.ip}:${this.config.port}] 连接错误`);
+      // 提示次數過於頻繁，不再提示
+      // logger.warn(`遠端服務 [${this.uuid}] [${this.config.ip}:${this.config.port}] 連線錯誤`);
       await this.onDisconnect();
     });
   }
@@ -88,14 +88,14 @@ export default class RemoteService {
       const res = await new RemoteRequest(this).request("auth", this.config.apiKey, 5000, true);
       if (res === true) {
         this.available = true;
-        logger.info(`远程服务 [${this.uuid}] [${this.config.ip}:${this.config.port}] 验证成功`);
+        logger.info(`遠端服務 [${this.uuid}] [${this.config.ip}:${this.config.port}] 驗證成功`);
         return true;
       }
       this.available = false;
-      logger.warn(`远程服务 [${this.uuid}] [${this.config.ip}:${this.config.port}] 验证失败`);
+      logger.warn(`遠端服務 [${this.uuid}] [${this.config.ip}:${this.config.port}] 驗證失敗`);
       return false;
     } catch (error) {
-      logger.warn(`远程服务 [${this.uuid}] [${this.config.ip}:${this.config.port}] 验证错误`);
+      logger.warn(`遠端服務 [${this.uuid}] [${this.config.ip}:${this.config.port}] 驗證錯誤`);
       return false;
     }
   }
@@ -115,7 +115,7 @@ export default class RemoteService {
 
   disconnect() {
     if (this.socket) {
-      logger.info(`[${this.uuid}] [${this.config.ip}:${this.config.port}] Socket 已主动释放连接`);
+      logger.info(`[${this.uuid}] [${this.config.ip}:${this.config.port}] Socket 已主動釋放連線`);
       this.socket.removeAllListeners();
       this.socket.disconnect();
       this.socket.close();

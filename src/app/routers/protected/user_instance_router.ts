@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Router from "@koa/router";
@@ -30,7 +30,7 @@ import { isHaveInstanceByUuid } from "../../service/permission_service";
 
 const router = new Router({ prefix: "/protected_instance" });
 
-// 路由权限验证中间件
+// 路由許可權驗證中介軟體
 router.use(async (ctx, next) => {
   const instanceUuid = String(ctx.query.uuid);
   const serviceUuid = String(ctx.query.remote_uuid);
@@ -39,12 +39,12 @@ router.use(async (ctx, next) => {
     await next();
   } else {
     ctx.status = 403;
-    ctx.body = "[Forbidden] [中间件] 参数不正确或非法访问实例";
+    ctx.body = "[Forbidden] [中介軟體] 引數不正確或非法訪問例項";
   }
 });
 
 // [Low-level Permission]
-// 开启实例路由
+// 開啟例項路由
 router.all(
   "/open",
   permission({ level: 1 }),
@@ -65,7 +65,7 @@ router.all(
 );
 
 // [Low-level Permission]
-// 实例关闭路由
+// 例項關閉路由
 router.all(
   "/stop",
   permission({ level: 1 }),
@@ -86,8 +86,8 @@ router.all(
 );
 
 // [Low-level Permission]
-// 向实例发送命令路由
-// 现阶段已实现WS跨面板端命令传递，此接口保留做API接口
+// 向例項傳送命令路由
+// 現階段已實現WS跨面板端命令傳遞，此介面保留做API介面
 router.all(
   "/command",
   permission({ level: 1 }),
@@ -110,7 +110,7 @@ router.all(
 );
 
 // [Low-level Permission]
-// 重启实例
+// 重啟例項
 router.all(
   "/restart",
   permission({ level: 1 }),
@@ -131,7 +131,7 @@ router.all(
 );
 
 // [Low-level Permission]
-// 终止实例
+// 終止例項
 router.all(
   "/kill",
   permission({ level: 1 }),
@@ -152,7 +152,7 @@ router.all(
 );
 
 // [Low-level Permission]
-// 执行异步任务
+// 執行非同步任務
 router.post(
   "/asynchronous",
   permission({ level: 1 }),
@@ -180,7 +180,7 @@ router.post(
 );
 
 // [Low-level Permission]
-// 终止异步任务
+// 終止非同步任務
 router.all(
   "/stop_asynchronous",
   permission({ level: 1 }),
@@ -203,7 +203,7 @@ router.all(
 );
 
 // [Low-level Permission]
-// 请求与守护进程建立数据流专有通道
+// 請求與守護程序建立資料流專有通道
 router.post(
   "/stream_channel",
   permission({ level: 1 }),
@@ -233,7 +233,7 @@ router.post(
 );
 
 // [Low-level Permission]
-// 根据文件列表获取实例配置文件列表
+// 根據檔案列表獲取例項配置檔案列表
 router.post(
   "/process_config/list",
   permission({ level: 1 }),
@@ -259,7 +259,7 @@ router.post(
 );
 
 // [Low-level Permission]
-// 获取指定配置文件内容
+// 獲取指定配置檔案內容
 router.get(
   "/process_config/file",
   permission({ level: 1 }),
@@ -288,7 +288,7 @@ router.get(
 );
 
 // [Low-level Permission]
-// 更新指定配置文件内容
+// 更新指定配置檔案內容
 router.put(
   "/process_config/file",
   permission({ level: 1 }),
@@ -318,7 +318,7 @@ router.put(
 );
 
 // [Low-level Permission]
-// 更新实例低权限配置数据（普通用户）
+// 更新例項低許可權配置資料（普通使用者）
 router.put(
   "/instance_update",
   permission({ level: 1 }),
@@ -331,19 +331,19 @@ router.put(
       const serviceUuid = String(ctx.query.remote_uuid);
       const instanceUuid = String(ctx.query.uuid);
       const config = ctx.request.body;
-      // 此处是低权限用户配置设置接口，为防止数据注入，必须进行一层过滤
-      // Ping 协议配置
+      // 此處是低許可權使用者配置設定介面，為防止資料注入，必須進行一層過濾
+      // Ping 協議配置
       const pingConfig = {
         ip: config.pingConfig.ip,
         port: config.pingConfig.port,
         type: config.pingConfig.type
       };
-      // 事件任务配置
+      // 事件任務配置
       const eventTask = {
         autoStart: config.eventTask.autoStart,
         autoRestart: config.eventTask.autoRestart
       };
-      // 网页终端设置
+      // 網頁終端設定
       const terminalOption = {
         haveColor: config.terminalOption?.haveColor ?? false
       };
@@ -363,7 +363,7 @@ router.put(
   }
 );
 
-// 获取某实例终端日志
+// 獲取某例項終端日誌
 router.get(
   "/outputlog",
   permission({ level: 1 }),

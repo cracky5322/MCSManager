@@ -10,13 +10,13 @@
   and if you modify the source code, you must open source the
   modified source code.
 
-  版权所有 (C) 2022 Suwings <Suwings@outlook.com>
+  版權所有 (C) 2022 Suwings <Suwings@outlook.com>
 
-  该程序是免费软件，您可以重新分发和/或修改据 GNU Affero 通用公共许可证的条款，
-  由自由软件基金会，许可证的第 3 版，或（由您选择）任何更高版本。
+  該程式是免費軟體，您可以重新分發和/或修改據 GNU Affero 通用公共許可證的條款，
+  由自由軟體基金會，許可證的第 3 版，或（由您選擇）任何更高版本。
 
-  根据 AGPL 与用户协议，您必须保留所有版权声明，如果修改源代码则必须开源修改后的源代码。
-  可以前往 https://mcsmanager.com/ 阅读用户协议，申请闭源开发授权等。
+  根據 AGPL 與使用者協議，您必須保留所有版權宣告，如果修改原始碼則必須開源修改後的原始碼。
+  可以前往 https://mcsmanager.com/ 閱讀使用者協議，申請閉源開發授權等。
 */
 
 import Koa from "koa";
@@ -33,15 +33,15 @@ export const LOGIN_COUNT = "loginCount";
 export const LOGIN_FAILED_COUNT_KEY = "loginFailedCount";
 
 export function login(ctx: Koa.ParameterizedContext, userName: string, passWord: string): string {
-  // 记录登录请求次数
+  // 記錄登入請求次數
   GlobalVariable.set(LOGIN_COUNT, GlobalVariable.get(LOGIN_COUNT, 0) + 1);
   const ip = ctx.socket.remoteAddress;
-  // 进行用户信息检查
+  // 進行使用者資訊檢查
   if (userSystem.checkUser({ userName, passWord })) {
-    // 登录成功后重置此IP的错误次数
+    // 登入成功後重置此IP的錯誤次數
     const ipMap = GlobalVariable.get(LOGIN_FAILED_KEY);
     delete ipMap[ip];
-    // 会话 Session 状态改变为已登陆
+    // 會話 Session 狀態改變為已登陸
     const user = userSystem.getUserByUserName(userName);
     user.loginTime = new Date().toLocaleString();
     ctx.session["login"] = true;
@@ -49,16 +49,16 @@ export function login(ctx: Koa.ParameterizedContext, userName: string, passWord:
     ctx.session["uuid"] = user.uuid;
     ctx.session["token"] = timeUuid();
     ctx.session.save();
-    logger.info(`[Logined Event] IP: ${ip} 成功登录账号 ${userName}`);
+    logger.info(`[Logined Event] IP: ${ip} 成功登入賬號 ${userName}`);
     logger.info(`Token: ${ctx.session["token"]}`);
     return ctx.session["token"];
   } else {
-    // 记录登录失败次数
+    // 記錄登入失敗次數
     GlobalVariable.set(LOGIN_FAILED_COUNT_KEY, GlobalVariable.get(LOGIN_FAILED_COUNT_KEY, 0) + 1);
     ctx.session["login"] = null;
     ctx.session["token"] = null;
     ctx.session.save();
-    logger.info(`[Logined Event] IP: ${ip} 登录账号 ${userName} 失败`);
+    logger.info(`[Logined Event] IP: ${ip} 登入賬號 ${userName} 失敗`);
     return null;
   }
 }
@@ -129,16 +129,16 @@ export function isAjax(ctx: Koa.ParameterizedContext) {
 
 export function checkBanIp(ctx: Koa.ParameterizedContext) {
   if (!GlobalVariable.map.has(LOGIN_FAILED_KEY)) GlobalVariable.set(LOGIN_FAILED_KEY, {});
-  // 此IpMap 在登录时也需要使用
+  // 此IpMap 在登入時也需要使用
   const ipMap = GlobalVariable.get(LOGIN_FAILED_KEY);
   const ip = ctx.socket.remoteAddress;
   if (ipMap[ip] > 10 && systemConfig.loginCheckIp === true) {
     if (ipMap[ip] != 999) {
-      // 记录封禁次数
+      // 記錄封禁次數
       GlobalVariable.set(BAN_IP_COUNT, GlobalVariable.get(BAN_IP_COUNT, 0) + 1);
       setTimeout(() => {
         delete ipMap[ip];
-        // 删除封禁次数
+        // 刪除封禁次數
         GlobalVariable.set(BAN_IP_COUNT, GlobalVariable.get(BAN_IP_COUNT, 1) - 1);
       }, 1000 * 60 * 10);
     }
